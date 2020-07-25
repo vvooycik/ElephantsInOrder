@@ -3,9 +3,11 @@ public class Elephant {
     private int  start, end;
     private int mass;
 
-    public Elephant(int index, int mass) {
+    public Elephant(int index, int mass, int start, int end) {
         this.index = index;
         this.mass = mass;
+        this.start = start;
+        this.end = end;
     }
 
     public int getStart() {

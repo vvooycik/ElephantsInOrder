@@ -13,9 +13,6 @@ public class Main {
             int n = Integer.parseInt(scanner.nextLine());
             Elephant[] elephants = new Elephant[n];
             String[] elephantsMass = scanner.nextLine().split(" ");
-            for(int i=0; i<n; i++){
-                elephants[i] = new Elephant(i, Integer.parseInt(elephantsMass[i]));
-            }
             List<Integer> start = Arrays
                     .stream(scanner
                     .nextLine()
@@ -28,6 +25,13 @@ public class Main {
                     .split(" "))
                     .map(Integer::parseInt)
                     .collect(Collectors.toList());
+            for(int i=0; i<n; i++){
+                elephants[i] = new Elephant(
+                        i,
+                        Integer.parseInt(elephantsMass[i]),
+                        start.indexOf(i),
+                        end.indexOf(i));
+            }
         }
         catch(IOException e){
             e.printStackTrace();
