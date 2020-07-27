@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -19,7 +16,20 @@ public class Main {
             int n = Integer.parseInt(scanner.nextLine());
             Elephant[] elephants = new Elephant[n];
             int[] permutation = new int[n];
-            String[] elephantsMass = scanner.nextLine().split(" ");
+            String[] elephantsMassTmp = scanner                 // retrieving masses as Strings
+                    .nextLine()
+                    .split(" ");
+            Integer[] elephantsMass = (Integer[]) Arrays        // Strings to Integers
+                    .stream(elephantsMassTmp)
+                    .map(Integer::parseInt)
+                    .toArray();
+
+            Optional<Integer> maxMass = Arrays
+                    .stream(elephantsMass)
+                    .max(Integer::compareTo);
+            Optional<Integer> minMass = Arrays
+                    .stream(elephantsMass)
+                    .min(Integer::compareTo);
 
             List<Integer> start = Arrays                    // order of the elephants at the beginning
                     .stream(scanner
@@ -39,7 +49,7 @@ public class Main {
             for(int i=0; i<n; i++) {                        // list of all elephants with all attributes
                 elephants[i] = new Elephant(
                         i,
-                        Integer.parseInt(elephantsMass[i]),
+                        elephantsMass[i],
                         start.indexOf(i),
                         end.indexOf(i));
             }
@@ -50,21 +60,30 @@ public class Main {
 
             // dividing permutation into cycles
 
-            List<List<Elephant>> cycles = new ArrayList<>();
+            List<Cycle> cycles = new ArrayList<>();
             boolean[] visited = new boolean[n];
             Arrays.fill(visited, false);
             for(int i=0; i<n; i++){
                 if(!visited[i]){
                     int x = i;
-                    List<Elephant> cycle = new ArrayList<>();
+                    Cycle cycle = new Cycle(0, maxMass.orElse(6500));  // Assumption claims Elephant mass is 100 <= n <= 6500 kg
                     while(!visited[x]){
                         visited[x] = true;
-                        cycle.add(elephants[x]);
-                        x = start.get(end.indexOf(elephants[x]));
+                        cycle.elephants.add(elephants[x]);
+                        x = start.get(end.indexOf(elephants[x].index));
                     }
                     cycles.add(cycle);
                 }
             }
+            int min = minMass.orElse(100); // Assumption claims Elephant mass is 100 <= n <= 6500 kg
+            for(Cycle c : cycles){
+                for(Elephant e : c.elephants){
+                    c.sum += e.getMass();
+                    c.min = Math.min(e.getMass(), c.min);
+                }
+            }
+
+
         }
         catch(IOException e){
             e.printStackTrace();
