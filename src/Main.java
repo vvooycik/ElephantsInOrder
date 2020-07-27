@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -16,7 +16,7 @@ public class Main {
             Scanner scanner = new Scanner(new File("data/slo1.in")); // TODO to be removed
             int n = Integer.parseInt(scanner.nextLine());
             Elephant[] elephants = new Elephant[n];
-            int[] permutation = new int[n];
+
             String[] elephantsMassTmp = scanner                 // retrieving masses as Strings
                     .nextLine()
                     .split(" ");
@@ -46,13 +46,12 @@ public class Main {
                     .map(Integer::parseInt)
                     .collect(Collectors.toList());
 
-
             for(int i=0; i<n; i++) {                        // list of all elephants with all attributes
                 elephants[i] = new Elephant(
                         i,
                         elephantsMass[i],
-                        start.indexOf(i),
-                        end.indexOf(i));
+                        start.indexOf(i+1),
+                        end.indexOf(i+1));
             }
 
 
@@ -70,8 +69,8 @@ public class Main {
                     Cycle cycle = new Cycle(0, maxMass.orElse(6500));  // Assumption claims Elephant mass is 100 <= n <= 6500 kg
                     while(!visited[x]){
                         visited[x] = true;
-                        cycle.elephants.add(elephants[x]);
-                        x = start.get(end.indexOf(elephants[x].index));
+                        cycle.add(elephants[x]);
+                        x = start.get(elephants[x].getEnd()) - 1;
                     }
                     cycles.add(cycle);
                 }
@@ -79,14 +78,9 @@ public class Main {
             int globalMin = minMass.orElse(100); // Assumption claims Elephant mass is 100 <= n <= 6500 kg
             int result = 0;
             for(Cycle c : cycles){
-                for(Elephant e : c.elephants){
-                    c.sum += e.getMass();
-                    c.min = Math.min(e.getMass(), c.min);
-                }
                 // Getting effort required to rearrange elephants in this cycle
                 result += c.getResult(globalMin);
             }
-
             System.out.println(result);
 
         }

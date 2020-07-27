@@ -5,9 +5,9 @@ public class Cycle {
 
     //  *** Fields ***
 
-    public List<Elephant> elephants;
-    public int sum;
-    public int min;
+    private List<Elephant> elephants;
+    private int sum;
+    private int min;
 
     // *** Counstructors ***
 
@@ -33,5 +33,24 @@ public class Cycle {
         return sum + min + (elephants.size() + 1) * globalMin;
     }
 
+    public int getSum() {
+        return sum;
+    }
 
+    public void setSum(int sum) {
+        this.sum = sum;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+    public void add(Elephant elephant){
+        elephants.add(elephant);
+        sum += elephant.getMass();
+        min = Math.min(elephant.getMass(), min);
+    }
 }
