@@ -1,7 +1,12 @@
 public class Elephant {
+
+    // *** Fields ***
+
     public final int index;
     private int  start, end;
     private int mass;
+
+    // *** Constructors ***
 
     public Elephant(int index, int mass, int start, int end) {
         this.index = index;
@@ -9,6 +14,8 @@ public class Elephant {
         this.start = start;
         this.end = end;
     }
+
+    // *** Public methods ***
 
     public int getStart() {
         return start;
