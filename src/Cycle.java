@@ -6,12 +6,12 @@ public class Cycle {
     //  *** Fields ***
 
     private List<Elephant> elephants;
-    private int sum;
-    private int min;
+    private long sum;
+    private long min;
 
     // *** Counstructors ***
 
-    public Cycle(int sum, int min){
+    public Cycle(long sum, long min){
         elephants = new ArrayList<>();
         this.sum = sum;
         this.min = min;
@@ -33,7 +33,7 @@ public class Cycle {
         return sum + min + (elephants.size() + 1) * globalMin;
     }
 
-    public int getSum() {
+    public long getSum() {
         return sum;
     }
 
@@ -41,7 +41,7 @@ public class Cycle {
         this.sum = sum;
     }
 
-    public int getMin() {
+    public long getMin() {
         return min;
     }
 
