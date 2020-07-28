@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 
 public class Main {
@@ -13,9 +13,11 @@ public class Main {
 
 
             // Scanner scanner = new Scanner(System.in); TODO uncomment before handing in the code.
-            Scanner scanner = new Scanner(new File("data/slo1.in")); // TODO to be removed
+            Scanner scanner = new Scanner(new File("data/slo10a.in")); // TODO to be removed
             int n = Integer.parseInt(scanner.nextLine());
-            Elephant[] elephants = new Elephant[n];
+            Hashtable<Integer, Elephant> elephants = new Hashtable<>();
+            Hashtable<Integer, Integer> startOrder = new Hashtable<>();
+            Hashtable<Integer, Integer> endOrder = new Hashtable<>();
 
             String[] elephantsMassTmp = scanner                 // retrieving masses as Strings
                     .nextLine()
@@ -32,28 +34,25 @@ public class Main {
                     .stream(elephantsMass)
                     .min(Integer::compareTo);
 
-            List<Integer> start = Arrays                    // order of the elephants at the beginning
+            Object[] start = Arrays                    // order of the elephants at the beginning
                     .stream(scanner
                     .nextLine()
                     .split(" "))
-                    .map(Integer::parseInt)
-                    .collect(Collectors.toList());
+                    .toArray();
 
-            List<Integer> end = Arrays                      // order of the elephants at the end
+            Object[] end = Arrays                      // order of the elephants at the end
                     .stream(scanner
                     .nextLine()
                     .split(" "))
-                    .map(Integer::parseInt)
-                    .collect(Collectors.toList());
+                    .toArray();
 
-            for(int i=0; i<n; i++) {                        // list of all elephants with all attributes
-                elephants[i] = new Elephant(
-                        i,
-                        elephantsMass[i],
-                        start.indexOf(i+1),
-                        end.indexOf(i+1));
+            for(int i=0; i<n; i++){
+                int valStart = Integer.parseInt((String)start[i]);
+                int valEnd = Integer.parseInt((String)end[i]);
+                startOrder.put(i, valStart);
+                endOrder.put(i, valEnd);
+                elephants.put(valEnd, new Elephant(valEnd, elephantsMass[valEnd-1], i));
             }
-
 
                   // *** Getting most efficient way of rearranging the order ***
 
@@ -63,20 +62,20 @@ public class Main {
             List<Cycle> cycles = new ArrayList<>();
             boolean[] visited = new boolean[n];
             Arrays.fill(visited, false);
-            for(int i=0; i<n; i++){
-                if(!visited[i]){
+            for(int i=1; i<=n; i++){
+                if(!visited[i-1]){
                     int x = i;
                     Cycle cycle = new Cycle(0, maxMass.orElse(6500));  // Assumption claims Elephant mass is 100 <= n <= 6500 kg
-                    while(!visited[x]){
-                        visited[x] = true;
-                        cycle.add(elephants[x]);
-                        x = start.get(elephants[x].getEnd()) - 1;
+                    while(!visited[x-1]){
+                        visited[x-1] = true;
+                        cycle.add(elephants.get(x));
+                        x = startOrder.get(elephants.get(x).getEnd());
                     }
                     cycles.add(cycle);
                 }
             }
             int globalMin = minMass.orElse(100); // Assumption claims Elephant mass is 100 <= n <= 6500 kg
-            int result = 0;
+            long result = 0;
             for(Cycle c : cycles){
                 // Getting effort required to rearrange elephants in this cycle
                 result += c.getResult(globalMin);

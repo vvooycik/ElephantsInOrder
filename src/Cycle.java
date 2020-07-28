@@ -19,17 +19,17 @@ public class Cycle {
 
     // *** Public methods ***
 
-    public Integer getResult(int globalMin){
+    public long getResult(int globalMin){
         return Math.min(method1(), method2(globalMin));
     }
 
     // *** Private methods ***
 
-    private Integer method1(){
+    private long method1(){
         return sum + (elephants.size() - 2) * min;
     }
 
-    private Integer method2(int globalMin){
+    private long method2(int globalMin){
         return sum + min + (elephants.size() + 1) * globalMin;
     }
 

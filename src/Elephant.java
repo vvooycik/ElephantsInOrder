@@ -8,10 +8,9 @@ public class Elephant {
 
     // *** Constructors ***
 
-    public Elephant(int index, int mass, int start, int end) {
+    public Elephant(int index, int mass, int end) {
         this.index = index;
         this.mass = mass;
-        this.start = start;
         this.end = end;
     }
 
