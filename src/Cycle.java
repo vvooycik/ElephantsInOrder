@@ -23,16 +23,6 @@ public class Cycle {
         return Math.min(method1(), method2(globalMin));
     }
 
-    // *** Private methods ***
-
-    private long method1(){
-        return sum + (elephants.size() - 2) * min;
-    }
-
-    private long method2(int globalMin){
-        return sum + min + (elephants.size() + 1) * globalMin;
-    }
-
     public long getSum() {
         return sum;
     }
@@ -53,4 +43,16 @@ public class Cycle {
         sum += elephant.getMass();
         min = Math.min(elephant.getMass(), min);
     }
+
+    // *** Private methods ***
+
+    private long method1(){
+        return sum + (elephants.size() - 2) * min;
+    }
+
+    private long method2(int globalMin){
+        return sum + min + (elephants.size() + 1) * globalMin;
+    }
+
+
 }
